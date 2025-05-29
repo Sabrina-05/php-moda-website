@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Username boshqa foydalanuvchi tomonidan band emasligini tekshirish
     $existingUser = $db->select('users', '*', "username = ? AND id != ?", [$username, $userId], 'si');
     if (!empty($existingUser)) {
         echo json_encode([
@@ -92,103 +91,97 @@ $user = $db->select('users', '*', "id = ?", [$userId], 'i')[0];
 
 <?php include './header.php'; ?>
 
-<div class="row">
-    <div class="container mt-5">
-        <h2 class="mb-4">👤 Profil Ma'lumotlari</h2>
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                <form id="profileForm" novalidate>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Ismingiz</label>
+                        <input type="text" class="form-control" id="name" name="name"
+                            value="<?= htmlspecialchars($user['name']) ?>" required>
+                    </div>
 
-        <form id="profileForm">
-            <div class="mb-3">
-                <label for="name" class="form-label">To‘liq ismingiz</label>
-                <input type="text" class="form-control" id="name" name="name"
-                    value="<?= htmlspecialchars($user['name']) ?>" required>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                            value="<?= htmlspecialchars($user['username']) ?>" required placeholder="3-20ta belgi">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Yangi parol</label>
+                        <div class="input-group">
+                            <input type="password" id="password" name="password" class="form-control"
+                                placeholder="Parol">
+                            <button type="button" class="btn btn-outline-secondary"
+                                onclick="togglePassword('password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label">Parolni tasdiqlang</label>
+                        <div class="input-group">
+                            <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+                                placeholder="Qayta kiriting">
+                            <button type="button" class="btn btn-outline-secondary"
+                                onclick="togglePassword('confirm_password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Saqlash</button>
+                </form>
             </div>
-
-            <div class="mb-3">
-                <label for="username" class="form-label">Username (o‘zgartirish mumkin)</label>
-                <input type="text" class="form-control" id="username" name="username"
-                    value="<?= htmlspecialchars($user['username']) ?>" required
-                    placeholder="3-20 ta harf, raqam yoki _">
-            </div>
-
-            <div class="mb-3 position-relative">
-                <label for="password" class="form-label">Yangi parol (agar o‘zgartirmoqchi bo‘lsangiz)</label>
-                <div class="input-group">
-                    <input type="password" id="password" class="form-control" name="password"
-                        placeholder="Yangi parol kiriting">
-                    <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('password')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="mb-3 position-relative">
-                <label for="confirm_password" class="form-label">Parolni tasdiqlang</label>
-                <div class="input-group">
-                    <input type="password" id="confirm_password" class="form-control" name="confirm_password"
-                        placeholder="Parolni takrorlang">
-                    <button class="btn btn-outline-secondary" type="button"
-                        onclick="togglePassword('confirm_password')">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">💾 Saqlash</button>
-        </form>
+        </div>
     </div>
-
-    <script>
-        function togglePassword(fieldId) {
-            const input = document.getElementById(fieldId);
-            const button = input.nextElementSibling;
-            const icon = button.querySelector('i');
-
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-            } else {
-                input.type = 'password';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-            }
-        }
-
-        document.getElementById('profileForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-
-            fetch('', {
-                method: 'POST',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                },
-                body: formData
-            })
-                .then(response => response.json())
-                .then(result => {
-                    Swal.fire({
-                        icon: result.success ? 'success' : 'error',
-                        title: result.title,
-                        text: result.message
-                    }).then(() => {
-                        if (result.success) {
-                            window.location.reload();
-                        }
-                    });
-                })
-                .catch(error => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: '❌ Tarmoq xatosi',
-                        text: 'Server bilan bog‘lanishda muammo yuz berdi.'
-                    });
-                    console.error('Fetch error:', error);
-                });
-        });
-    </script>
-
 </div>
+
+<script>
+    function togglePassword(fieldId) {
+        const input = document.getElementById(fieldId);
+        const button = input.nextElementSibling;
+        const icon = button.querySelector('i');
+
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+
+    document.getElementById('profileForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        fetch('', {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            body: formData
+        })
+            .then(res => res.json())
+            .then(result => {
+                Swal.fire({
+                    icon: result.success ? 'success' : 'error',
+                    title: result.title,
+                    text: result.message
+                }).then(() => {
+                    if (result.success) window.location.reload();
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: '❌ Xatolik',
+                    text: 'Server bilan bog‘lanishda muammo.'
+                });
+                console.error(error);
+            });
+    });
+</script>
 
 <?php include './footer.php'; ?>
