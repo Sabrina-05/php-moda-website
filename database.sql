@@ -55,5 +55,28 @@ CREATE TABLE cards (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
+-- ====================
 INSERT INTO users (name, username, password, role)
 VALUES ('Toxtamurodova Sabrina', 'sabrina', '$2y$10$osogG6WW0sE4U5INkTwDROOOMqSohBkl16FTiW8k4KL0ZS88zaAZe', 'admin');
+
+-- ==================== Categories ga 3 ta ma'lumot ====================
+INSERT INTO categories (name, description)
+VALUES 
+('Kiyim-kechak', 'Erkaklar va ayollar uchun zamonaviy kiyimlar'),
+('Poyabzallar', 'Sport, klassik va kundalik poyabzallar'),
+('Aksessuarlar', 'Soatlar, sumkalar, ko‘zoynaklar va boshqalar');
+
+-- ==================== Products ga 3 ta mahsulot ====================
+INSERT INTO products (category_id, name, description, image, price)
+VALUES 
+(1, 'Oversize hoodie', 'Issiq va qulay hoodie, turli ranglarda mavjud', 'hoodie.jpg', 249.99),
+(2, 'Nike Air Max 270', 'Yengil va qulay sport poyabzali', 'airmax270.jpg', 699.00),
+(3, 'Ko‘zoynak Ray-Ban', 'Yozgi kolleksiya uchun ideal tanlov', 'rayban.jpg', 159.50);
+
+-- ==================== Cards ga ma'lumotlar (foydalanuvchi sabrina uchun) ====================
+-- sabrina foydalanuvchi idsi 1 deb faraz qilamiz, chunki bu birinchi user bo‘lib kiritilgan
+INSERT INTO cards (user_id, product_id, quantity)
+VALUES 
+(1, 1, 2), -- 2 ta hoodie
+(1, 2, 1), -- 1 juft Nike Air Max
+(1, 3, 1); -- 1 dona Ray-Ban ko‘zoynak
