@@ -13,8 +13,7 @@ $menuItems = [
         "menuTitle" => "Settings",
         "icon" => "fas fa-cog",
         "pages" => [
-            ["title" => "Profile", "url" => "profile.php"],
-            ["title" => "Active Sessions", "url" => "active_sessions.php"]
+            ["title" => "Profile", "url" => "profile.php"]
         ],
     ]
 ];
@@ -55,12 +54,12 @@ $active_page = $active_pageInfo['active_page'] ?? null;
     <!-- CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    <link rel="stylesheet" href="./src/css/adminlte.min.css">
+    <link rel="stylesheet" href="../src/css/adminlte.min.css">
     <!-- JS -->
-    <script src="./src/js/jquery.min.js"></script>
-    <script src="./src/js/bootstrap.bundle.min.js"></script>
+    <script src="../src/js/jquery.min.js"></script>
+    <script src="../src/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-    <script src="./src/js/adminlte.min.js" defer></script>
+    <script src="../src/js/adminlte.min.js" defer></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -125,7 +124,7 @@ $active_page = $active_pageInfo['active_page'] ?? null;
 
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <a href="./" class="brand-link">
-                <img src="./src/images/logo.svg" alt="Logo" class="brand-image img-circle bg-white">
+                <img src="../src/images/logo.svg" alt="Logo" class="brand-image img-circle bg-white">
                 <span class="brand-text font-weight-light">
                     Admin Panel
                 </span>
@@ -134,7 +133,7 @@ $active_page = $active_pageInfo['active_page'] ?? null;
                 <div class="user-panel mt-3 pb-3 mb-3">
                     <a href="./profile.php" class="d-flex">
                         <div class="image">
-                            <img src="./src/images/profile_picture/default.png" class="img-circle elevation-2 bg-white" alt="User Image">
+                            <img src="../src/images/profile_picture/default.png" class="img-circle elevation-2 bg-white" alt="User Image">
                         </div>
                         <div class="info">
                             Ilhomjonov Iqbolshoh
