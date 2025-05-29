@@ -171,7 +171,7 @@ $users = $db->select('users', '*');
             e.preventDefault();
             const formData = new FormData(this);
 
-            fetch('users.php', {
+            fetch('', {
                 method: 'POST',
                 body: formData
             })
