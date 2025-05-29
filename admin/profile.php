@@ -13,20 +13,45 @@ $userId = $_SESSION['user']['id'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
+
     $name = trim($_POST['name']);
+    $username = trim($_POST['username']);
     $password = trim($_POST['password']);
     $confirm_password = trim($_POST['confirm_password']);
 
-    if (empty($name)) {
+    if (empty($name) || empty($username)) {
         echo json_encode([
             "success" => false,
             "title" => "⚠️ Diqqat!",
-            "message" => "Ismingizni kiritishingiz kerak!"
+            "message" => "Ismingiz va username to‘ldirilishi kerak!"
         ]);
         exit;
     }
 
-    $updateData = ['name' => $name];
+    if (!preg_match('/^[a-zA-Z0-9_]{3,20}$/', $username)) {
+        echo json_encode([
+            "success" => false,
+            "title" => "❌ Username xato!",
+            "message" => "Username 3-20 ta belgidan iborat, faqat a-z, 0-9 va _ bo‘lishi mumkin!"
+        ]);
+        exit;
+    }
+
+    // Username boshqa foydalanuvchi tomonidan band emasligini tekshirish
+    $existingUser = $db->select('users', '*', "username = ? AND id != ?", [$username, $userId], 'si');
+    if (!empty($existingUser)) {
+        echo json_encode([
+            "success" => false,
+            "title" => "❌ Username band!",
+            "message" => "Bu username allaqachon mavjud, boshqa tanlang!"
+        ]);
+        exit;
+    }
+
+    $updateData = [
+        'name' => $name,
+        'username' => $username
+    ];
 
     if (!empty($password) || !empty($confirm_password)) {
         if ($password !== $confirm_password) {
@@ -37,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             exit;
         }
-
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $updateData['password'] = $hashedPassword;
     }
@@ -46,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($updated) {
         $_SESSION['user']['name'] = $name;
+        $_SESSION['user']['username'] = $username;
 
         echo json_encode([
             "success" => true,
@@ -75,17 +100,18 @@ $user = $db->select('users', '*', "id = ?", [$userId], 'i')[0];
             <div class="mb-3">
                 <label for="name" class="form-label">To‘liq ismingiz</label>
                 <input type="text" class="form-control" id="name" name="name"
-                    value="<?= htmlspecialchars($user['name']) ?>">
+                    value="<?= htmlspecialchars($user['name']) ?>" required>
             </div>
 
             <div class="mb-3">
-                <label for="username" class="form-label">Username (o‘zgartirib bo‘lmaydi)</label>
-                <input type="text" class="form-control" id="username" value="<?= htmlspecialchars($user['username']) ?>"
-                    disabled>
+                <label for="username" class="form-label">Username (o‘zgartirish mumkin)</label>
+                <input type="text" class="form-control" id="username" name="username"
+                    value="<?= htmlspecialchars($user['username']) ?>" required
+                    placeholder="3-20 ta harf, raqam yoki _">
             </div>
 
             <div class="mb-3 position-relative">
-                <label for="password" class="form-label">Yangi parol</label>
+                <label for="password" class="form-label">Yangi parol (agar o‘zgartirmoqchi bo‘lsangiz)</label>
                 <div class="input-group">
                     <input type="password" id="password" class="form-control" name="password"
                         placeholder="Yangi parol kiriting">
