@@ -9,14 +9,22 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 include '../config.php';
 $db = new Database();
 
-$users = $db->select('users', '*');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
+
+    if (empty($_POST['id']) || !is_numeric($_POST['id'])) {
+        echo json_encode([
+            "success" => false,
+            "title" => "❌ Xato!",
+            "message" => "Foydalanuvchi ID topilmadi!"
+        ]);
+        exit;
+    }
 
     $id = intval($_POST['id']);
     $name = trim($_POST['name']);
     $username = trim($_POST['username']);
-    $role = trim($_POST['role'] ?? '');
+    $role = trim($_POST['role'] ?? 'user');
 
     if (empty($name) || empty($username)) {
         echo json_encode([
@@ -55,9 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode([
         "success" => $updated,
         "title" => $updated ? "✅ Yangilandi!" : "😕 Xatolik",
-        "message" => $updated ? "Ma'lumotlar saqlandi!" : "Yangilashda muammo yuz berdi."
+        "message" => $updated ? "Ma'lumotlar saqlandi!" : "Yangilashda muammo yuz berdi "
     ]);
+    exit;
 }
+
+$users = $db->select('users', '*');
 ?>
 
 <?php include './header.php'; ?>
@@ -160,9 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             e.preventDefault();
             const formData = new FormData(this);
 
-            fetch('user_edit_ajax.php', {
+            fetch('users.php', {
                 method: 'POST',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 body: formData
             })
                 .then(res => res.json())
