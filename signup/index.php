@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirm_password = $_POST['confirm_password'] ?? '';
 
-    if ($name === '' || $username === '' || $password === '') {
+    if (empty(trim($name)) || empty(trim($username)) || empty(trim($password))) {
         echo json_encode([
             'success' => false,
             'title' => '⚠️ Diqqat!',
@@ -115,20 +115,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="mb-3">
                                 <label for="name" class="form-label">Full Name</label>
                                 <input type="text" class="form-control" id="name" name="name"
-                                    placeholder="Enter full name" required />
+                                    placeholder="Enter full name" />
                             </div>
 
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
                                 <input type="text" class="form-control" id="username" name="username"
-                                    placeholder="Enter username" required />
+                                    placeholder="Enter username" />
                             </div>
 
                             <div class="mb-3 position-relative">
                                 <label for="password" class="form-label">Password</label>
                                 <div class="input-group">
                                     <input type="password" id="password" class="form-control" name="password"
-                                        placeholder="Enter password" required />
+                                        placeholder="Enter password" />
                                     <button class="btn btn-outline-secondary" type="button"
                                         onclick="togglePassword('password')">
                                         <i class="fas fa-eye"></i>
@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <label for="confirm_password" class="form-label">Confirm Password</label>
                                 <div class="input-group">
                                     <input type="password" id="confirm_password" class="form-control"
-                                        name="confirm_password" placeholder="Confirm password" required />
+                                        name="confirm_password" placeholder="Confirm password" />
                                     <button class="btn btn-outline-secondary" type="button"
                                         onclick="togglePassword('confirm_password')">
                                         <i class="fas fa-eye"></i>
