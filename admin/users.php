@@ -196,3 +196,5 @@ $users = $db->select('users', '*');
         });
     });
 </script>
+
+<?php include './footer.php'; ?>
