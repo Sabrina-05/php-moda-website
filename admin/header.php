@@ -6,14 +6,45 @@ $menuItems = [
         "menuTitle" => "Dashboard",
         "icon" => "fas fa-tachometer-alt",
         "pages" => [
-            ["title" => "Home", "url" => "index.php"]
+            ["title" => "Home", "url" => "index.php"],
         ],
     ],
     [
-        "menuTitle" => "Settings",
+        "menuTitle" => "Foydalanuvchilar",
+        "icon" => "fas fa-users",
+        "pages" => [
+            ["title" => "Foydalanuvchilar", "url" => "users.php"],
+            ["title" => "Foydalanuvchi qo‘shish", "url" => "user_add.php"],
+        ],
+    ],
+    [
+        "menuTitle" => "Kategoriyalar",
+        "icon" => "fas fa-tags",
+        "pages" => [
+            ["title" => "Kategoriyalar", "url" => "categories.php"],
+            ["title" => "Kategoriya qo‘shish", "url" => "category_add.php"],
+        ],
+    ],
+    [
+        "menuTitle" => "Mahsulotlar",
+        "icon" => "fas fa-tshirt",
+        "pages" => [
+            ["title" => "Mahsulotlar", "url" => "products.php"],
+            ["title" => "Mahsulot qo‘shish", "url" => "product_add.php"],
+        ],
+    ],
+    [
+        "menuTitle" => "Savat",
+        "icon" => "fas fa-shopping-cart",
+        "pages" => [
+            ["title" => "Savat", "url" => "carts.php"],
+        ],
+    ],
+    [
+        "menuTitle" => "Sozlamalar",
         "icon" => "fas fa-cog",
         "pages" => [
-            ["title" => "Profile", "url" => "profile.php"]
+            ["title" => "Profil", "url" => "profile.php"],
         ],
     ]
 ];
@@ -50,16 +81,17 @@ $active_page = $active_pageInfo['active_page'] ?? null;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <title><?= htmlspecialchars($page_title) ?></title>
-    <link rel="icon" href="./favicon.ico" type="image/x-icon">
-    <!-- CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
-    <link rel="stylesheet" href="../src/css/adminlte.min.css">
-    <!-- JS -->
-    <script src="../src/js/jquery.min.js"></script>
-    <script src="../src/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-    <script src="../src/js/adminlte.min.js" defer></script>
+    <link rel="icon" href="../favicon.ico" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -133,7 +165,8 @@ $active_page = $active_pageInfo['active_page'] ?? null;
                 <div class="user-panel mt-3 pb-3 mb-3">
                     <a href="./profile.php" class="d-flex">
                         <div class="image">
-                            <img src="../src/images/profile_picture/default.png" class="img-circle elevation-2 bg-white" alt="User Image">
+                            <img src="../src/images/profile_picture/default.png" class="img-circle elevation-2 bg-white"
+                                alt="User Image">
                         </div>
                         <div class="info">
                             Ilhomjonov Iqbolshoh
