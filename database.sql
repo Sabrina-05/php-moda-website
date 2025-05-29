@@ -1,23 +1,18 @@
-/* 
- * ======================================================
- *                🎯 DATABASE YARATISH BOSQICHLARI 🎯
- * ======================================================
- */
+/* ======================================================
+ *       🎯 MODA_DB DATABASE - AYOLLAR KIYIMLARI 🎯
+ * ====================================================== */
 
--- 1. 🔄 Avvalgi versiyani tozalash (agar mavjud bo‘lsa)
+/* 1. 🔄 Eski database’ni o‘chirib tashlash */
 DROP DATABASE IF EXISTS moda_db;
 
--- 2. 🆕 Yangi database yaratish
+/* 2. 🆕 Yangi database yaratish */
 CREATE DATABASE moda_db;
 
--- 3. 🎯 Yaratilgan database’ni aktivlashtirish
+/* 3. 🎯 Yaratilgan database’ni tanlash */
 USE moda_db;
 
-/* 
- * ====================== 👥 USERS TABLE ======================
- * Foydalanuvchilar haqida ma’lumot:
- * - Admin va oddiy userlar uchun
- * - Parollar hashlangan holatda saqlanadi
+/* ====================== 👥 USERS TABLE ======================
+ * Foydalanuvchilar: admin va oddiy userlar
  */
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,10 +24,8 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-/* 
- * ====================== 📂 CATEGORIES TABLE ======================
- * Mahsulot toifalari:
- * - Kiyim-kechak, poyabzal, aksessuarlar va boshqalar
+/* ====================== 📂 CATEGORIES TABLE ======================
+ * Kategoriya: ayollar kiyimlari moddalari uchun kategoriya jadvali 
  */
 CREATE TABLE categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -41,11 +34,9 @@ CREATE TABLE categories (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-/* 
- * ====================== 🛍️ PRODUCTS TABLE ======================
- * Mahsulotlar ro'yxati:
- * - Kategoriya asosida bog‘langan
- * - Narxi, tavsifi va rasmi saqlanadi
+/* ====================== 🛍️ PRODUCTS TABLE ======================
+ * Ayollar kiyimlari mahsulotlari ro'yxati
+ * Har bir mahsulot o‘z kategoriya ID bilan bog‘langan
  */
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,11 +49,9 @@ CREATE TABLE products (
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
 );
 
-/* 
- * ====================== 🛒 CARDS TABLE ======================
- * Xaridor savatlari:
- * - User va product ID asosida
- * - Miqdori bilan birga
+/* ====================== 🛒 CARDS TABLE ======================
+ * Savatcha jadvali: foydalanuvchi va mahsulot IDlari bilan
+ * miqdori ko‘rsatiladi
  */
 CREATE TABLE cards (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -74,41 +63,40 @@ CREATE TABLE cards (
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
-/* 
- * ====================== 🔐 USERLAR MA'LUMOTI ======================
- * 1 admin + 1 oddiy user
- * Parollar: bcrypt bilan hashlangan
+/* ====================== 🔐 USERS MA'LUMOTLARI ======================
+ * 1 admin va 1 oddiy user (bcrypt parol bilan)
  */
-INSERT INTO users (name, username, password, role) VALUES  
-('Toxtamurodova Sabrina', 'sabrina', '$2y$10$osogG6WW0sE4U5INkTwDROOOMqSohBkl16FTiW8k4KL0ZS88zaAZe', 'admin'),
-('User', 'User', '$2y$10$osogG6WW0sE4U5INkTwDROOOMqSohBkl16FTiW8k4KL0ZS88zaAZe', 'user');
+INSERT INTO users (name, username, password, role) VALUES
+  ('Toxtamurodova Sabrina', 'sabrina', '$2y$10$osogG6WW0sE4U5INkTwDROOOMqSohBkl16FTiW8k4KL0ZS88zaAZe', 'admin'),
+  ('User', 'user', '$2y$10$osogG6WW0sE4U5INkTwDROOOMqSohBkl16FTiW8k4KL0ZS88zaAZe', 'user');
 
-/* 
- * ====================== 🗂️ CATEGORIES ======================
- * 3 ta asosiy kategoriya
+/* ====================== 🗂️ KATEGORIYALAR ======================
+ * 3 ta kategoriya yaratildi:
+ * 1 - Ko‘ylaklar
+ * 2 - Shimlar
+ * 3 - Yuqori kiyimlar
  */
-INSERT INTO categories (name, description) VALUES  
-('Kiyim-kechak', 'Erkaklar va ayollar uchun zamonaviy kiyimlar'),
-('Poyabzallar', 'Sport, klassik va kundalik poyabzallar'),
-('Aksessuarlar', 'Soatlar, sumkalar, ko‘zoynaklar va boshqalar');
+INSERT INTO categories (name, description) VALUES
+  ('Ko‘ylaklar', 'Yozgi, bahorgi va maxsus tadbirlar uchun zamonaviy ko‘ylaklar'),
+  ('Shimlar', 'Har kuni kiyish uchun qulay va zamonaviy jinslar, shimlar'),
+  ('Yuqori kiyimlar', 'Sviterlar, futbolkalar va boshqa yuqori kiyim turlari');
 
-/* 
- * ====================== 🛒 PRODUCTS ======================
- * 3 ta mahsulot — har biri alohida kategoriya ostida
+/* ====================== 🛒 MAHSULOTLAR ======================
+ * Har bir mahsulot o‘z kategoriyasiga tegishli
  */
-INSERT INTO products (category_id, name, description, image, price) VALUES  
-(1, 'Oversize hoodie', 'Issiq va qulay hoodie, turli ranglarda mavjud', 'hoodie.jpg', 249.99),
-(2, 'Nike Air Max 270', 'Yengil va qulay sport poyabzali', 'airmax270.jpg', 699.00),
-(3, 'Ko‘zoynak Ray-Ban', 'Yozgi kolleksiya uchun ideal tanlov', 'rayban.jpg', 159.50);
+INSERT INTO products (category_id, name, description, image, price) VALUES
+  (1, 'Yozgi ko‘ylak', 'Yengil va rang-barang yozgi ko‘ylak', 'summer_dress.jpg', 79.99),
+  (1, 'Maxsus tadbir ko‘ylagi', 'Elegant va nafis maxsus tadbir uchun ko‘ylak', 'party_dress.jpg', 149.99),
+  (2, 'Jeans shimlari', 'Quyuq ko‘k, zamonaviy ayollar jinslari', 'jeans_pants.jpg', 99.99),
+  (2, 'Ofis shimlari', 'Klassik va rasmiy ofis uchun shimlar', 'office_pants.jpg', 89.99),
+  (3, 'Trikotaj sviter', 'Yumshoq va iliq trikotaj sviter', 'knit_sweater.jpg', 59.99),
+  (3, 'Yozgi futbolka', 'Oddiy va qulay yozgi futbolka', 'summer_tshirt.jpg', 39.99);
 
-/* 
- * ====================== 🛍️ CARDS (Savatcha) ======================
- * User (id = 2) savatchasi:
- * - 2 ta hoodie
- * - 1 juft Nike
- * - 1 dona Ray-Ban
+/* ====================== 🛍️ SAVATCHA (CARDS) ======================
+ * User (id=2) savatchasi:
+ * - 1 ta Yozgi ko‘ylak
+ * - 2 ta Maxsus tadbir ko‘ylagi
  */
-INSERT INTO cards (user_id, product_id, quantity) VALUES  
-(2, 1, 2), 
-(2, 2, 1), 
-(2, 3, 1);
+INSERT INTO cards (user_id, product_id, quantity) VALUES
+  (2, 1, 1),
+  (2, 2, 2);
